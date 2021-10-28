@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.0</version>
-    <date>2021-10-25T14:21:49Z</date>
+    <date>2021-10-28T07:03:28Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -9,8 +9,8 @@
     </groups>
     <templates>
         <template>
-            <template>Template NUT Network UPS Tool Basic</template>
-            <name>Template NUT Network UPS Tool Basic</name>
+            <template>Template NUT Network UPS Tool APC</template>
+            <name>Template NUT Network UPS Tool APC</name>
             <description>Define the UPS Name in the macro {$UPS_NAME}&#13;
 This template works only if you have dfined your UPS as&#13;
 {$UPS_NAME}@localhost.&#13;
@@ -93,7 +93,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <snmp_community/>
                     <snmp_oid/>
                     <key>ups.BatteryAge[{$UPS_NAME}]</key>
-                    <delay>1d</delay>
+                    <delay>1m</delay>
                     <history>90d</history>
                     <trends>365d</trends>
                     <status>0</status>
@@ -627,6 +627,10 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <value>1095</value>
                 </macro>
                 <macro>
+                    <macro>{$UPS_BATTERY_RUNTIME_CRITICAL}</macro>
+                    <value>300</value>
+                </macro>
+                <macro>
                     <macro>{$UPS_CRIT_TEMP}</macro>
                     <value>40.0</value>
                 </macro>
@@ -659,7 +663,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                             <sort_triggers>0</sort_triggers>
                             <resource>
                                 <name>UPS Battery Charge</name>
-                                <host>Template NUT Network UPS Tool Basic</host>
+                                <host>Template NUT Network UPS Tool APC</host>
                             </resource>
                             <max_columns>3</max_columns>
                             <application/>
@@ -681,7 +685,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                             <sort_triggers>0</sort_triggers>
                             <resource>
                                 <name>UPS Battery Voltage</name>
-                                <host>Template NUT Network UPS Tool Basic</host>
+                                <host>Template NUT Network UPS Tool APC</host>
                             </resource>
                             <max_columns>3</max_columns>
                             <application/>
@@ -703,7 +707,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                             <sort_triggers>0</sort_triggers>
                             <resource>
                                 <name>UPS AC Input/Output Voltage</name>
-                                <host>Template NUT Network UPS Tool Basic</host>
+                                <host>Template NUT Network UPS Tool APC</host>
                             </resource>
                             <max_columns>3</max_columns>
                             <application/>
@@ -725,7 +729,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                             <sort_triggers>0</sort_triggers>
                             <resource>
                                 <name>UPS Load</name>
-                                <host>Template NUT Network UPS Tool Basic</host>
+                                <host>Template NUT Network UPS Tool APC</host>
                             </resource>
                             <max_columns>3</max_columns>
                             <application/>
@@ -747,7 +751,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                             <sort_triggers>0</sort_triggers>
                             <resource>
                                 <key>ups.UpsStatus[{$UPS_NAME}]</key>
-                                <host>Template NUT Network UPS Tool Basic</host>
+                                <host>Template NUT Network UPS Tool APC</host>
                             </resource>
                             <max_columns>3</max_columns>
                             <application/>
@@ -759,7 +763,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template NUT Network UPS Tool Basic:net.tcp.service[tcp,,3493].last()}=0</expression>
+            <expression>{Template NUT Network UPS Tool APC:net.tcp.service[tcp,,3493].last()}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>NUT Daemon is DOWN</name>
@@ -775,7 +779,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
             <tags/>
         </trigger>
         <trigger>
-            <expression>{Template NUT Network UPS Tool Basic:ups.BatteryAge[{$UPS_NAME}].last()}&gt;{$UPS_BATTERY_AGE_CRITICAL}</expression>
+            <expression>{Template NUT Network UPS Tool APC:ups.BatteryAge[{$UPS_NAME}].last()}&gt;{$UPS_BATTERY_AGE_CRITICAL}</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>UP Battery Age Critical</name>
@@ -791,7 +795,23 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
             <tags/>
         </trigger>
         <trigger>
-            <expression>{Template NUT Network UPS Tool Basic:ups.BatteryTemperature[{$UPS_NAME}].last()}&gt;{$UPS_CRIT_TEMP}</expression>
+            <expression>{Template NUT Network UPS Tool APC:ups.BatteryRuntime[{$UPS_NAME}].last()}&lt;{$UPS_BATTERY_RUNTIME_CRITICAL}</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
+            <name>UP Battery Runtime Critical</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
+            <url/>
+            <status>0</status>
+            <priority>4</priority>
+            <description>{$UPS_BATTERY_RUNTIME_CRITICAL} in seconds</description>
+            <type>0</type>
+            <manual_close>0</manual_close>
+            <dependencies/>
+            <tags/>
+        </trigger>
+        <trigger>
+            <expression>{Template NUT Network UPS Tool APC:ups.BatteryTemperature[{$UPS_NAME}].last()}&gt;{$UPS_CRIT_TEMP}</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>UPS Battery Temperature Critical</name>
@@ -807,7 +827,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
             <tags/>
         </trigger>
         <trigger>
-            <expression>{Template NUT Network UPS Tool Basic:ups.UpsStatus[{$UPS_NAME}].str(ON BATTERY)}=1</expression>
+            <expression>{Template NUT Network UPS Tool APC:ups.UpsStatus[{$UPS_NAME}].str(ON BATTERY)}=1</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>UPS is on battery</name>
@@ -850,7 +870,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
-                        <host>Template NUT Network UPS Tool Basic</host>
+                        <host>Template NUT Network UPS Tool APC</host>
                         <key>ups.InputVoltage[{$UPS_NAME}]</key>
                     </item>
                 </graph_item>
@@ -862,7 +882,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
-                        <host>Template NUT Network UPS Tool Basic</host>
+                        <host>Template NUT Network UPS Tool APC</host>
                         <key>ups.OutputVoltage[{$UPS_NAME}]</key>
                     </item>
                 </graph_item>
@@ -894,7 +914,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
-                        <host>Template NUT Network UPS Tool Basic</host>
+                        <host>Template NUT Network UPS Tool APC</host>
                         <key>ups.BatteryCharge[{$UPS_NAME}]</key>
                     </item>
                 </graph_item>
@@ -926,7 +946,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
-                        <host>Template NUT Network UPS Tool Basic</host>
+                        <host>Template NUT Network UPS Tool APC</host>
                         <key>ups.BatteryVoltage[{$UPS_NAME}]</key>
                     </item>
                 </graph_item>
@@ -958,7 +978,7 @@ https://share.zabbix.com/power-ups/others/network-ups-tool-basic-monitoring</des
                     <calc_fnc>2</calc_fnc>
                     <type>0</type>
                     <item>
-                        <host>Template NUT Network UPS Tool Basic</host>
+                        <host>Template NUT Network UPS Tool APC</host>
                         <key>ups.UpsLoad[{$UPS_NAME}]</key>
                     </item>
                 </graph_item>
