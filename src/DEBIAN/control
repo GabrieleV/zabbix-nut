@@ -1,5 +1,5 @@
 Package: zabbix-nut
-Version: 1.0.0-2021102501
+Version: 1.0.0-2021110301
 Section: net
 Priority: optional
 Architecture: all
