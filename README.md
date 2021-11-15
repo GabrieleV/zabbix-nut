@@ -11,6 +11,12 @@ Define the UPS Name in the macro {$UPS_NAME}
 This template works only if you have defined in NUT your UPS as
 {$UPS_NAME}@localhost.
 
+Check values of the right Battery Age date end disable Item of the wrong/unsupported one:
+
+* BatteryAge
+* BatteryMfrAge
+
+
 ## Debian package creation
 
  ./makedeb 
